@@ -1,0 +1,93 @@
+{% extends 'page/base.html' %}
+
+{% block login_display %}
+    <a href="#">Welcome {{ username }}</a>
+{% endblock %}
+
+{% block style %}
+    <style>
+        .main {
+            margin-top: 20px;
+            margin-left: 50px;
+            margin-right: 50px;
+        }
+
+        .my_input {
+            position: absolute;
+            width: 80%;
+        }
+
+    </style>
+{% endblock %}
+
+{% block js %}
+    <script>
+        function refund(flight_id) {
+            var choice = confirm("Are you sure to refund?");
+            if (choice == true) {
+                window.location = "/refund/" + flight_id;
+            }
+        }
+        function delete_account(bank_account) {
+            var choice = confirm("Are you sure to delete payment method?");
+            if (choice==true){
+                window.location = "/delete_payment/" + bank_account;
+            }
+
+
+        }
+    </script>
+{% endblock %}
+
+{% block content %}
+
+    <div class="main">
+        <table class="table table-striped table-bordered">
+            <thead>
+              <tr>
+                  <th style="text-align: center">Total Distance</th>
+              </tr>
+            </thead>
+            <tbody style="text-align: center">
+               <tr>
+                   <td>{{ distance }} miles</td>
+               </tr>
+            </tbody>
+
+        </table>
+
+        <table class="table table-striped table-bordered">
+            <thead>
+               <tr>
+                <th style="text-align: center">Flight</th>
+                <th style="text-align: center">Departure_airport</th>
+                <th style="text-align: center">Arrive_airport</th>
+                <th style="text-align: center">Departure_time</th>
+                <th style="text-align: center">Arrive_time</th>
+                <th style="text-align: center">Credit card</th>
+                <th style="text-align: center">Price</th>
+               </tr>
+            </thead>
+            <tbody style="text-align: center">
+              {% for flight in booked_flight %}
+                 <tr>
+                  <td>{{ flight.name }}</td>
+                  <td>{{ flight.departure_city }}&nbsp{{ flight.departure_airport }}</td>
+                  <td>{{ flight.arrive_city }}&nbsp{{ flight.arrive_airport }}</td>
+                  <td>{{ flight.departure_time }}</td>
+                  <td>{{ flight.arrive_time }}</td>
+                  <td>{{ flight.payment }}</td>
+                  <td>${{ flight.price }} &nbsp;&nbsp;&nbsp;
+                      <button class="btn btn-sm btn-danger" onclick="refund({{ flight.id }})">Refund</button>
+                  </td>
+                 </tr>
+              {% endfor %}
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+
+{% endblock %}

@@ -1,0 +1,114 @@
+{% extends 'page/base.html' %}
+
+{% block login_display %}
+    <a href="#">Welcome {{ username }}</a>
+{% endblock %}
+
+{% block js %}
+    <script>
+
+        function confirm_info() {
+            var remain_seats = document.getElementById('remain_seats').innerHTML;
+            document.getElementById('book_btns').style.display = "none";
+            if (remain_seats > 0) {
+                document.getElementById('book_success').style.display = "block";
+            } else {
+                document.getElementById('book_failure').style.display = "block";
+            }
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+
+
+        function PostData() {
+            $.ajax({
+                type: "POST",
+                url: "",
+                data: ""
+            });
+            return false;
+        }
+
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid" style="margin-top: 20px">
+        <div class="alert" style="background-color: white;overflow: hidden">
+            <h1>Dear Custom</h1>
+            <div id="info_body" style="margin-left: 50px;margin-right: 50px">
+                <p>
+                    You choose <strong style="font-size: large"> {{ flight.name }} </strong> flight，
+                    there still remains
+                    <strong id="remain_seats"
+                            style="font-size: xx-large;color: #ff6600;font-style: italic">{{ flight.capacity }}</strong>
+                    tickets
+                </p>
+                <table class="table table-striped table-bordered">
+                    <thead>
+                    <tr>
+                        <th style="text-align: center">Flight</th>
+                        <th style="text-align: center">Departure Airport</th>
+                        <th style="text-align: center">Arriving Airport</th>
+                        <th style="text-align: center">Departure Time</th>
+                        <th style="text-align: center">Arriving Time</th>
+                        <th style="text-align: center">Price</th>
+                    </tr>
+                    </thead>
+                    <tbody style="text-align: center">
+                    <tr>
+                        <td>{{ flight.name }}</td>
+                        <td>{{ flight.departure_city }}&nbsp{{ flight.departure_airport }}</td>
+                        <td>{{ flight.arrive_city }}&nbsp{{ flight.arrive_airport }}</td>
+                        <td>{{ flight.departure_time }}</td>
+                        <td>{{ flight.arrive_time }}</td>
+                        <td>${{ flight.price }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div id="book_success" style="display: none">
+                    <p style="color: green;font-size: large;font-weight: bold">
+                        Please continue to choose payment method!
+                    </p>
+                </div>
+
+                <div id="book_failure" style="display: none">
+                    <p style="color: red;font-size: large;font-weight: bold">
+                        No Tickets anymore, please choose other flights
+                    </p>
+                </div>
+
+                <div id="book_btns" align="right">
+
+                    <form onsubmit="return PostData()" method="post" style="display: inline">
+                        <input class="btn btn-primary" style="width: 80px" value="Confirmed" type="submit"
+                               onclick="confirm_info()">
+                    </form>
+                    <a href="" class="btn btn-danger" style="width: 80px" onclick="goBack()">Return</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<div class="container-fluid" style="margin-top: 20px">
+        <div class="alert" style="background-color: white;overflow: hidden">
+            <h3 style="margin-top: 20px;margin-left: 30px">Choose Payment:</h3>
+            <form style="margin-left: 30px" action="{% url 'book:choosePayment' %}" method="post" >
+               {% csrf_token %}
+               {% for payment in payments %}
+                   <div class="checkbox">
+                      <label>
+                          <input type="checkbox" name="bank_account" value={{ payment.bank_account }}>{{ payment.bank_account }}
+                      </label>
+                   </div>
+               {% endfor %}
+                <input class="btn btn btn-primary" type="submit" value="Submit">
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
+

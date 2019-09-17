@@ -1,0 +1,43 @@
+{% extends 'page/base.html' %}
+
+{% block login_display %}
+    <a href="#">Welcome admin</a>
+{% endblock %}
+
+
+{% block content %}
+    <div class="book_orders" style="margin-left: 20px; margin-right: 20px">
+        <div class="col-sm-12" style="background-color: white">
+            <h1>Order List</h1>
+            <div>
+                <table class="table table-bordered table-striped">
+                    <thead>
+                    <th style="text-align: center">Count</th>
+                    <th style="text-align: center">Passenger</th>
+                    <th style="text-align: center">Flight</th>
+                    <th style="text-align: center">Route</th>
+                    <th style="text-align: center">Departure time</th>
+                    <th style="text-align: center">Ticket</th>
+                    <th style="text-align: center">Credit card</th>
+                    </thead>
+                    <tbody align="center">
+                     {% for order in order_set %}
+                         <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ order.passenger_name }}</td>
+                            <td>{{ order.flight_name }}</td>
+                            <td>{{ order.flight_route }}</td>
+                            <td>{{ order.flight_ltime }}</td>
+                            <td>${{ order.flight_price }}</td>
+                            <td>{{ order.card }}</td>
+                         </tr>
+                     {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+    </div>
+{% endblock %}

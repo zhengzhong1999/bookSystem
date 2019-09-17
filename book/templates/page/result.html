@@ -1,0 +1,225 @@
+{% extends 'page/base.html' %}
+{% block login_display %}
+    <a href="#">Welcome {{ username }}</a>
+{% endblock %}
+
+
+
+{% block style %}
+
+    <style>
+
+    body {
+        background-image: url("https://picjumbo.com/wp-content/uploads/just-fly_free_stock_photos_picjumbo_IMG_7626-2210x1473.jpg");
+        background-size: cover;
+    }
+
+    .main {
+            margin-left: 50px;
+            margin-right: 50px;
+        }
+
+        .search_form {
+            background-color: white;
+            margin-top: 25px;
+            margin-left: 50px;
+            height: 90px;
+        }
+
+        .search_head {
+            background-color: #f1f1f1;
+            margin-top: 10px;
+            height: 30px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .search_result_by_ltime {
+            background-color: #f1f1f1;
+            margin-top: 10px;
+        }
+
+        .search_result_by_price {
+            background-color: #f1f1f1;
+            margin-top: 10px;
+        }
+
+        .one_line {
+            background-color: white;
+            height: 90px;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .ico_search_type {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+        }
+
+        .ico_search_lcity {
+            background-position: 0 0;
+        }
+
+        .ico_search_acity {
+            background-position: 0 -20px;
+        }
+
+        .ico_search_ldate {
+            background-position: 0 -40px;
+        }
+
+        .my_input {
+            position: absolute;
+            width: 80%;
+        }
+
+        .btn-warning {
+            background-color: #ffb000;
+        }
+
+        .flight_name {
+            line-height: 90px;
+            font-size: x-large;
+            font-weight: bold;
+        }
+
+    </style>
+
+{% endblock %}
+
+
+
+
+{% block content %}
+
+    <div class="main">
+    <!--Search Container-->
+        <div class="search_form" style="background-color: transparent">
+            <div class = "col-sm-12" style="margin-top: 20px">
+                <form action = "{% url 'book:result' %}" method="post">
+                    {% csrf_token %}
+                    <div class="col-sm-3">
+                        <img class="ico_search_lcity ico_search_type"
+                             src="http://ku.90sjimg.com/element_origin_min_pic/00/91/63/6756f178c6ab208.jpg"><br>
+                        <input class="my_input" type="text" id="departure_city" name="departure_city" placeholder="City"
+                               value="{{ departure_city }}">
+                    </div>
+                    <div class="col-sm-3">
+                        <img class="ico_search_type ico_search_acity"
+                             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlLJBFpjieHJHaaWg6eYF5U8lLOI522rTJi_WAoiXJ1q8-NkgZ"><br>
+                        <input class="my_input" type="text" id="arrive_city" name="arrive_city" placeholder="City"
+                               value="{{ arrive_city }}">
+                    </div>
+                    <div class="col-sm-3">
+                        <img class="ico_search_type ico_search_ldate"
+                             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkmyGsm8UqryiKDuELlmkkKFGPTQTWuGMDYfoK71XJx0Gm7U7a"><br>
+                        <input class="my_input" type="date" id="departure_date" name="departure_date" placeholder="Date"
+                               value="{{ departure_date }}">
+                    </div>
+                    <div class="col-sm-3">
+                        <div style="position: absolute; margin-top: 25px; margin-left: 25%">
+                            <input class="btn btn btn-primary" name="research_btn" type="submit" value="search">
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Title -->
+    <div class="search_head" id="search_head" style="display: {{ dis_search_head }}; background-color: transparent">
+        <div class="col-sm-12">
+            <p class="col-sm-1"></p>
+            <button class="col-sm-2 btn btn-primary" >Flight</button>
+            <button class="col-sm-2 btn btn-success" >Departure Time</button>
+            <button class="col-sm-2 btn btn-danger" >Arrive Time</button>
+            <button class="col-sm-2 btn btn-warning" >First Class</button>
+            <button class="col-sm-2 btn btn-info" >Economy Class</button>
+            <p class="col-sm-1"></p>
+        </div>
+
+    </div>
+
+
+    <!--if not result -->
+
+    <div class="alert" id="search_failure"
+         style="margin:50px; background-color:transparent;display: {{ dis_search_failure }}">
+         <div style="padding-left: 10%">
+             <h1>Oops...</h1>
+             <h2 style="margin-left: 50px">
+                We don't have this airline. Please walk to your destination!
+             </h2>
+         </div>
+
+    </div>
+
+    <!-- display by price-->
+
+    <div class="search_result_by_price" id="result_by_price" style="background-color: transparent">
+        {% for flight in available_flights_by_price %}
+            <div class="one_line" style="background-color: transparent">
+                <div class="col-sm-12">
+                    <div class="col-sm-1">
+
+                    </div>
+                    <div class="col-sm-2">
+                        <p class="flight_name">{{ flight.name }}</p>
+                    </div>
+                    <div class="col-sm-2">
+                        <p style="padding: 10px">
+                            <span style="font-size: xx-large">{{ flight.departure_time }}</span>
+                            <br>
+                            {{ flight.departure_airport }}
+                        </p>
+                    </div>
+                    <div class="col-sm-2">
+                        <p style="padding: 10px">
+                            <span style="font-size: xx-large">{{ flight.arrive_time }}</span>
+                            <br>
+                            {{ flight.arrive_airport }}
+                        </p>
+                    </div>
+                    <div class="col-sm-2">
+                        <p style="padding: 22px 0">
+                            <span style="position: absolute; margin-top: 10px; margin-left: -50px;
+                                  font-size: smaller; color: black">Capacity</span>
+                            <span style="position:absolute; margin-top: 26px; margin-left: -47px;
+                                   font-size: smaller;color: black">{{ flight.first_book_sum }}/{{ flight.first_capacity }}</span>
+                            <sup>$</sup>
+
+                            <span style="color: #ff6600;font-size: xx-large;">{{ flight.first_price }}</span>
+                            <a href="{% url 'book:book_ticket_firstClass' flight.id %}"
+                                   class="btn btn-sm btn-warning">Order</a>
+
+                        </p>
+                    </div>
+                    <div class="col-sm-2">
+                        <p style="padding: 22px 0">
+                            <span style="position: absolute; margin-top: 10px; margin-left: -50px;
+                                  font-size: smaller; color: black">Capacity</span>
+                            <span style="position:absolute; margin-top: 26px; margin-left: -47px;
+                                   font-size: smaller;color: black">{{ flight.book_sum }}/{{ flight.capacity }}</span>
+                            <sup>$</sup>
+
+                            <span style="color: #ff6600;font-size: xx-large;">{{ flight.price }}</span>
+                            <a href="{% url 'book:book_ticket' flight.id %}"
+                                   class="btn btn-sm btn-warning">Order</a>
+
+                        </p>
+                    </div>
+                    <div class="col-sm-1">
+
+                    </div>
+
+                </div>
+            </div>
+            <hr style="margin-left: 30px;margin-right: 30px;border: 1px solid">
+        {% endfor %}
+
+    </div>
+
+{% endblock %}

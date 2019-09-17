@@ -1,0 +1,23 @@
+{% extends 'page/base.html' %}
+
+{% block login_display %}
+    <a href="#">Welcome {{ username }}</a>
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid" style="margin-top: 20px">
+        <div class="alert" style="background-color: white;overflow: hidden">
+            <h1>Dear Customer</h1>
+            <div id="info_body" style="margin-left: 50px;margin-right: 50px">
+                <p>
+                    You have already booked this flight.
+                </p>
+            </div>
+
+            <div id="book_btns" align="right">
+                <a href="" class="btn btn-danger" style="width: 80px" onclick="history.back();">Return</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
